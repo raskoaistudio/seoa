@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>서아의 선택 · SEOA</title>
+<meta name="description" content="의정부 사는 버추얼 인플루언서 서아가 고른 데일리룩·자취살림. 게시물 번호로 찾아보세요.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #F4EFE6;
+    --oat: #D9CBB5;
+    --mocha: #8B6F5A;
+    --charcoal: #3A3A3A;
+    --sage: #A3B18A;
+    --card: #FFFDF9;
+    --muted: #8A8279;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', system-ui, sans-serif;
+    background: var(--ivory);
+    color: var(--charcoal);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 16px 48px; }
+
+  .disclosure {
+    background: var(--charcoal);
+    color: var(--ivory);
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 16px;
+  }
+
+  header { text-align: center; padding: 32px 0 20px; }
+  .avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    object-fit: cover; border: 3px solid var(--card);
+    box-shadow: 0 4px 16px rgba(139,111,90,.18);
+  }
+  h1 { font-size: 22px; font-weight: 700; margin-top: 12px; letter-spacing: -.02em; }
+  .bio { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .ai-badge {
+    display: inline-block; margin-top: 10px;
+    font-size: 11px; font-weight: 500; color: var(--mocha);
+    border: 1px solid var(--oat); border-radius: 99px; padding: 3px 10px;
+  }
+
+  .search {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--ivory); padding: 12px 0 8px;
+  }
+  .search input {
+    width: 100%; font: inherit; font-size: 16px;
+    padding: 12px 16px; border-radius: 14px;
+    border: 1px solid var(--oat); background: var(--card); color: var(--charcoal);
+    outline: none;
+  }
+  .search input:focus { border-color: var(--mocha); }
+
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex: none; font: inherit; font-size: 13px; cursor: pointer;
+    padding: 7px 14px; border-radius: 99px;
+    border: 1px solid var(--oat); background: transparent; color: var(--charcoal);
+  }
+  .tab[aria-pressed="true"] { background: var(--mocha); border-color: var(--mocha); color: #fff; }
+
+  .list { display: grid; gap: 12px; }
+  .card {
+    display: grid; grid-template-columns: 88px 1fr; gap: 14px; align-items: center;
+    background: var(--card); border-radius: 18px; padding: 12px;
+    box-shadow: 0 1px 3px rgba(58,58,58,.05);
+    scroll-margin-top: 80px;
+  }
+  .card.flash { animation: flash 1.6s ease; }
+  @keyframes flash { 0%, 40% { box-shadow: 0 0 0 3px var(--sage); } 100% { box-shadow: 0 1px 3px rgba(58,58,58,.05); } }
+  .thumb {
+    width: 88px; height: 88px; border-radius: 12px; object-fit: cover;
+    background: var(--oat); display: grid; place-items: center; font-size: 30px;
+  }
+  .no { font-size: 12px; font-weight: 700; color: var(--mocha); }
+  .title { font-size: 15px; font-weight: 500; margin-top: 2px; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .buy {
+    display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 500;
+    color: #fff; background: var(--charcoal); text-decoration: none;
+    padding: 6px 12px; border-radius: 99px;
+  }
+  .buy[aria-disabled="true"] { background: var(--oat); color: var(--muted); pointer-events: none; }
+  .soldout { opacity: .5; }
+  .empty { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 0; }
+
+  footer { text-align: center; font-size: 11px; color: var(--muted); margin-top: 32px; }
+</style>
+</head>
+<body>
+  <div class="disclosure">이 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+  <div class="wrap">
+    <header>
+      <img class="avatar" src="seoa.jpg" alt="서아 프로필 사진">
+      <h1>서아의 선택</h1>
+      <p class="bio">의정부 원룸에서 고른 데일리룩 · 살림 · 야식</p>
+      <span class="ai-badge">🤖 AI 버추얼 인플루언서</span>
+    </header>
+
+    <div class="search">
+      <input id="q" type="search" inputmode="search" placeholder="게시물 번호나 상품명으로 찾기 (예: 12)" autocomplete="off">
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+    <main class="list" id="list"></main>
+
+    <footer>가격과 재고는 쿠팡에서 실시간으로 확인해 주세요.<br>업데이트 <span id="updated"></span></footer>
+  </div>
+
+<script src="products.js"></script>
+<script>
+  const CATEGORIES = {
+    all: { label: '전체', icon: '' },
+    look: { label: '데일리룩', icon: '👗' },
+    home: { label: '자취방', icon: '🏠' },
+    night: { label: '배달각', icon: '🍜' },
+    beauty: { label: '뷰티', icon: '💄' },
+    hobby: { label: '취미', icon: '☕' }
+  };
+  let items = [];
+  let active = 'all';
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function renderTabs() {
+    $('tabs').innerHTML = Object.entries(CATEGORIES).map(([key, c]) =>
+      `<button class="tab" data-cat="${key}" aria-pressed="${key === active}">${c.icon} ${c.label}</button>`
+    ).join('');
+  }
+
+  function render() {
+    const q = $('q').value.trim();
+    const isNumber = /^\d+$/.test(q);
+    const shown = items.filter((it) => {
+      if (active !== 'all' && it.category !== active) return false;
+      if (!q) return true;
+      if (isNumber) return String(it.no) === q;
+      return (it.title + ' ' + (it.note || '')).toLowerCase().includes(q.toLowerCase());
+    });
+
+    if (!shown.length) {
+      $('list').innerHTML = `<p class="empty">${isNumber ? q + '번 상품을 찾을 수 없어요' : '해당하는 상품이 없어요'}</p>`;
+      return;
+    }
+
+    $('list').innerHTML = shown.map((it) => {
+      const cat = CATEGORIES[it.category] || { icon: '🤍' };
+      const thumb = it.image
+        ? `<img class="thumb" src="${esc(it.image)}" alt="" loading="lazy">`
+        : `<div class="thumb">${cat.icon}</div>`;
+      const soldout = it.status === 'soldout';
+      const hasLink = it.link && !soldout;
+      return `
+        <article class="card${soldout ? ' soldout' : ''}" id="no-${it.no}">
+          ${thumb}
+          <div>
+            <div class="no">No. ${it.no}</div>
+            <div class="title">${esc(it.title)}</div>
+            ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
+            <a class="buy" href="${hasLink ? esc(it.link) : '#'}" target="_blank" rel="sponsored noopener"
+               aria-disabled="${!hasLink}">${soldout ? '품절' : hasLink ? '쿠팡에서 보기' : '링크 준비 중'}</a>
+          </div>
+        </article>`;
+    }).join('');
+
+    if (isNumber && shown.length === 1) {
+      const el = $('no-' + shown[0].no);
+      el.classList.add('flash');
+    }
+  }
+
+  $('tabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab');
+    if (!btn) return;
+    active = btn.dataset.cat;
+    renderTabs();
+    render();
+  });
+  $('q').addEventListener('input', render);
+
+  const data = window.SEOA_PRODUCTS;
+  if (!data) {
+    $('list').innerHTML = '<p class="empty">상품 목록을 불러오지 못했어요</p>';
+  } else {
+    items = data.items
+      .filter((it) => it.status === 'live' || it.status === 'soldout')
+      .sort((a, b) => b.no - a.no);
+    $('updated').textContent = data.updated;
+    // seoa.page/#12 처럼 번호로 바로 들어오는 링크 지원
+    const applyHash = () => {
+      const hashNo = location.hash.replace('#', '');
+      if (/^\d+$/.test(hashNo)) $('q').value = hashNo;
+      render();
+    };
+    window.addEventListener('hashchange', applyHash);
+    renderTabs();
+    applyHash();
+  }
+</script>
+</body>
+</html>
